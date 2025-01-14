@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Screen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .stop {
+            font-size: 1.2em;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #direction {
+            margin: 20px 0;
+            font-size: 1.5em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>司機屏幕</h1>
+    <div id="direction">行駛方向: 去程</div>
+    <div id="stopsList">載入中...</div>
+    <button id="toggleDirection">切換行駛方向</button>
+
+    <script>
+        // 獲取並更新站牌列表
+        async function fetchStops() {
+            try {
+                const response = await fetch('http://localhost:3000/stops');
+                if (response.ok) {
+                    const { stops, direction } = await response.json();
+                    // 更新行駛方向
+                    document.getElementById('direction').textContent = `行駛方向: ${direction}`;
+                    // 更新站牌列表
+                    const stopsList = document.getElementById('stopsList');
+                    stopsList.innerHTML = stops.length
+                        ? stops.map(stop => `
+                            <div class="stop">
+                                ${stop} 
+                                <button onclick="removeStop('${stop}')">刪除</button>
+                            </div>`).join('')
+                        : "目前沒有需要停靠的站點。";
+                } else {
+                    console.error('伺服器錯誤:', response.status);
+                }
+            } catch (error) {
+                console.error('無法連接到伺服器:', error);
+            }
+        }
+
+        // 刪除指定站牌
+        async function removeStop(stop) {
+            try {
+                const response = await fetch('http://localhost:3000/stops', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ stop })
+                });
+                if (response.ok) {
+                    fetchStops(); // 重新更新站牌列表
+                }
+            } catch (error) {
+                console.error('無法刪除站牌:', error);
+            }
+        }
+
+        // 切換行駛方向
+        async function toggleDirection() {
+            try {
+                const response = await fetch('http://localhost:3000/direction', { method: 'POST' });
+                if (response.ok) {
+                    fetchStops(); // 重新更新站牌和方向
+                }
+            } catch (error) {
+                console.error('無法切換行駛方向:', error);
+            }
+        }
+
+        // 設置切換方向按鈕的點擊事件
+        document.getElementById('toggleDirection').addEventListener('click', toggleDirection);
+
+        // 初次載入和自動更新
+        fetchStops();
+        setInterval(fetchStops, 5000); // 每 5 秒更新一次
+    </script>
+</body>
+</html>

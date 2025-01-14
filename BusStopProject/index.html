@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5089 公車下車站點選擇</title>
+    <style>
+        /* 設定基本的頁面樣式 */
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          color: #333;
+          padding: 20px;
+          margin: 0;
+        }
+
+        /* 主要容器的樣式 */
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 標題的樣式 */
+        h1 {
+          text-align: center;
+          font-size: 24px;
+          color: #4CAF50;
+        }
+
+        /* 表單標籤的樣式 */
+        label {
+          display: block;
+          margin-bottom: 10px;
+          font-size: 16px;
+        }
+
+        /* 下拉選單的樣式 */
+        select {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 16px;
+        }
+
+        /* 按鈕的樣式 */
+        button {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px 15px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          width: 100%;
+          font-size: 16px;
+        }
+
+        button:hover {
+          background-color: #45a049;
+        }
+
+        /* 顯示選擇的站點的區塊 */
+        .selection {
+          margin-top: 20px;
+          font-size: 16px;
+          color: #333;
+        }
+
+        #selectedStop {
+          font-weight: bold;
+          color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>選擇您的下車站點（5089 公車）</h1>
+        
+        <form id="busStopForm">
+            <label for="busStops">選擇您的站點:</label>
+            <select id="busStops" name="busStop">
+                <!-- 動態生成站點 -->
+            </select>
+            
+            <div class="selection">
+                <h3>您選擇的站點:</h3>
+                <p id="selectedStop">尚未選擇任何站點</p>
+            </div>
+            
+            <button type="submit">確認選擇</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
